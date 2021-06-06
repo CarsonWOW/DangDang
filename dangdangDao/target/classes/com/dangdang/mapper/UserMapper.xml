@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- namespace 命名空间 必需是接口全限定名 -->
+<mapper namespace="com.dangdang.mapper.UserMapper">
+ 
+ 	<!--添加用户  -->
+  <insert id="insertUser" parameterType="com.dangdang.po.User">
+  		<!--selectKey:查询主健
+			keyProperty:语句结果生成属性
+			resultType:生成结果类型
+			order:先执行 selectKey还是先执行 insert语句
+		  -->
+		<selectKey keyProperty="tid" resultType="int" order="BEFORE">
+			<!-- select t_user_seq.nextval from dual -->
+			select max(tid)+1 from t_user
+		</selectKey>
+  		INSERT INTO t_user(tid,uname,birthday,sex,address) 
+  		VALUES(t_user_seq.nextval,#{uname},#{birthday},#{sex},#{address})
+  </insert>
+	<!--根据id查询 select :相当于statement对象 id:statement唯一标识，调用时使用，必需代表唯一 parameterType:输入映射类型，输入JAVA类型 
+		resultType：输出映射类型，输出结果所映射类型 #{}:表示占位符 -->
+	<select id="findUserById" parameterType="int" resultType="com.dangdang.po.User"
+		useCache="false">
+		select * from t_user where tid=#{value}
+	</select>
+	
+	<!--修改用户  -->
+	<update id="updateUserSet" parameterType="com.dangdang.po.User">
+		update t_user
+		<set>
+			<if test="uname!=null">
+				uname =#{uname},
+			</if>
+			<if test="birthday!=null">
+				birthday =#{birthday},
+			</if>
+			<if test="sex!=null and sex!=0">
+				sex =#{sex},
+			</if>
+			<if test="address!=null">
+				address =#{address},
+			</if>
+		</set>
+		where tid=#{tid}
+	</update>
+	
+	<!--删除用户  -->
+	<delete id="deleteUser" parameterType="int">
+		delete from t_user where tid=#{tid}
+	</delete>
+	
+	<sql id="queryUserId">
+		select u.*, rownum rnum from t_user u
+	</sql>
+	<!--分页查询  -->
+	<select id="queryUserPage" resultType="com.dangdang.po.User">
+		
+		select   uu.* from
+			(<include refid="queryUserId"></include>) uu
+		
+		where uu.rnum <![CDATA[ > ]]>#{begin} and uu.rnum <![CDATA[ <= ]]>#{end}
+	</select>
+	
+	<!--获取总条数  -->
+	<select id="queryUserCount" resultType="int">
+	
+		select count(uu.tid) from (<include refid="queryUserId"></include>) uu
+	</select>
+	
+</mapper>

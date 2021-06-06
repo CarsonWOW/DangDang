@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangdang.mapper.DangdangCommentDao">
+  <resultMap id="BaseResultMap" type="DangdangComment">
+    <id column="DU_ID" jdbcType="INTEGER" property="duId" />
+    <result column="DP_ID" jdbcType="INTEGER" property="dpId" />
+    <result column="DU_comment_NAME" jdbcType="VARCHAR" property="duCommentName" />
+    <result column="DU_CONTENT" jdbcType="VARCHAR" property="duContent" />
+    <result column="DU_answer_content" jdbcType="VARCHAR" property="duAnswerContent" />
+    <result column="DU_CREATE_TIME" jdbcType="TIMESTAMP" property="duCreateTime" />
+    <result column="DU_reply_TIME" jdbcType="TIMESTAMP" property="duReplyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DU_ID, DP_ID, DU_comment_NAME, DU_CONTENT, DU_answer_content, DU_CREATE_TIME, DU_reply_TIME
+  </sql>
+  <select id="selectByExample" parameterType="DangdangComment" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dangdang_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dangdang_comment
+    where DU_ID = #{duId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dangdang_comment
+    where DU_ID = #{duId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="DangdangComment">
+    delete from dangdang_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="DU_ID" keyProperty="duId" parameterType="DangdangComment" useGeneratedKeys="true">
+    insert into dangdang_comment (DP_ID, DU_comment_NAME, DU_CONTENT, 
+      DU_answer_content, DU_CREATE_TIME, DU_reply_TIME
+      )
+    values (#{dpId,jdbcType=INTEGER}, #{duCommentName,jdbcType=VARCHAR}, #{duContent,jdbcType=VARCHAR}, 
+      #{duAnswerContent,jdbcType=VARCHAR}, #{duCreateTime,jdbcType=TIMESTAMP}, #{duReplyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="Commentinsert" keyColumn="DU_ID" keyProperty="duId" parameterType="DangdangComment" useGeneratedKeys="true" >
+    <selectKey keyProperty="duId" resultType="java.lang.Integer" order="BEFORE">
+      SELECT MAX(DU_ID)+1 FROM dangdang_comment
+    </selectKey>
+  INSERT INTO dangdang_comment(DU_ID,DU_comment_NAME,DU_CONTENT,DU_CREATE_TIME)
+  VALUES(#{duId,jdbcType=INTEGER},#{duCommentName,jdbcType=VARCHAR},#{duContent,jdbcType=VARCHAR},NOW())
+</insert>
+
+  <insert id="insertSelective" keyColumn="DU_ID" keyProperty="duId" parameterType="DangdangComment" useGeneratedKeys="true">
+    insert into dangdang_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dpId != null">
+        DP_ID,
+      </if>
+      <if test="duCommentName != null">
+        DU_comment_NAME,
+      </if>
+      <if test="duContent != null">
+        DU_CONTENT,
+      </if>
+      <if test="duAnswerContent != null">
+        DU_answer_content,
+      </if>
+      <if test="duCreateTime != null">
+        DU_CREATE_TIME,
+      </if>
+      <if test="duReplyTime != null">
+        DU_reply_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dpId != null">
+        #{dpId,jdbcType=INTEGER},
+      </if>
+      <if test="duCommentName != null">
+        #{duCommentName,jdbcType=VARCHAR},
+      </if>
+      <if test="duContent != null">
+        #{duContent,jdbcType=VARCHAR},
+      </if>
+      <if test="duAnswerContent != null">
+        #{duAnswerContent,jdbcType=VARCHAR},
+      </if>
+      <if test="duCreateTime != null">
+        #{duCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duReplyTime != null">
+        #{duReplyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="DangdangComment" resultType="java.lang.Long">
+    select count(*) from dangdang_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dangdang_comment
+    <set>
+      <if test="record.duId != null">
+        DU_ID = #{record.duId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dpId != null">
+        DP_ID = #{record.dpId,jdbcType=INTEGER},
+      </if>
+      <if test="record.duCommentName != null">
+        DU_comment_NAME = #{record.duCommentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duContent != null">
+        DU_CONTENT = #{record.duContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duAnswerContent != null">
+        DU_answer_content = #{record.duAnswerContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duCreateTime != null">
+        DU_CREATE_TIME = #{record.duCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duReplyTime != null">
+        DU_reply_TIME = #{record.duReplyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dangdang_comment
+    set DU_ID = #{record.duId,jdbcType=INTEGER},
+      DP_ID = #{record.dpId,jdbcType=INTEGER},
+      DU_comment_NAME = #{record.duCommentName,jdbcType=VARCHAR},
+      DU_CONTENT = #{record.duContent,jdbcType=VARCHAR},
+      DU_answer_content = #{record.duAnswerContent,jdbcType=VARCHAR},
+      DU_CREATE_TIME = #{record.duCreateTime,jdbcType=TIMESTAMP},
+      DU_reply_TIME = #{record.duReplyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="DangdangComment">
+    update dangdang_comment
+    <set>
+      <if test="dpId != null">
+        DP_ID = #{dpId,jdbcType=INTEGER},
+      </if>
+      <if test="duCommentName != null">
+        DU_comment_NAME = #{duCommentName,jdbcType=VARCHAR},
+      </if>
+      <if test="duContent != null">
+        DU_CONTENT = #{duContent,jdbcType=VARCHAR},
+      </if>
+      <if test="duAnswerContent != null">
+        DU_answer_content = #{duAnswerContent,jdbcType=VARCHAR},
+      </if>
+      <if test="duCreateTime != null">
+        DU_CREATE_TIME = #{duCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duReplyTime != null">
+        DU_reply_TIME = #{duReplyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where DU_ID = #{duId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="DangdangComment">
+    update dangdang_comment
+    set DP_ID = #{dpId,jdbcType=INTEGER},
+      DU_comment_NAME = #{duCommentName,jdbcType=VARCHAR},
+      DU_CONTENT = #{duContent,jdbcType=VARCHAR},
+      DU_answer_content = #{duAnswerContent,jdbcType=VARCHAR},
+      DU_CREATE_TIME = #{duCreateTime,jdbcType=TIMESTAMP},
+      DU_reply_TIME = #{duReplyTime,jdbcType=TIMESTAMP}
+    where DU_ID = #{duId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

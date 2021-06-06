@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangdang.mapper.DangdangOrderDao">
+  <resultMap id="BaseResultMap" type="com.dangdang.po.DangdangOrder">
+    <id column="DO_ID" jdbcType="INTEGER" property="doId" />
+    <result column="DO_USER_ID" jdbcType="VARCHAR" property="doUserId" />
+    <result column="DO_USER_NAME" jdbcType="VARCHAR" property="doUserName" />
+    <result column="DO_USER_TEL" jdbcType="VARCHAR" property="doUserTel" />
+    <result column="DO_USER_ADDRESS" jdbcType="VARCHAR" property="doUserAddress" />
+    <result column="DO_COST" jdbcType="INTEGER" property="doCost" />
+    <result column="DO_CREATE_TIME" jdbcType="TIMESTAMP" property="doCreateTime" />
+    <result column="DO_STATUS" jdbcType="INTEGER" property="doStatus" />
+    <result column="DO_TYPE" jdbcType="INTEGER" property="doType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DO_ID, DO_USER_ID, DO_USER_NAME, DO_USER_TEL, DO_USER_ADDRESS, DO_COST, DO_CREATE_TIME, 
+    DO_STATUS, DO_TYPE
+  </sql>
+  <select id="selectByExample" parameterType="DangdangOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dangdang_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dangdang_order
+    where DO_ID = #{doId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dangdang_order
+    where DO_ID = #{doId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="DangdangOrderExample">
+    delete from dangdang_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="DO_ID" keyProperty="doId" parameterType="DangdangOrder" useGeneratedKeys="true">
+    insert into dangdang_order (DO_USER_ID, DO_USER_NAME, DO_USER_TEL, 
+      DO_USER_ADDRESS, DO_COST, DO_CREATE_TIME, 
+      DO_STATUS, DO_TYPE)
+    values (#{doUserId,jdbcType=VARCHAR}, #{doUserName,jdbcType=VARCHAR}, #{doUserTel,jdbcType=VARCHAR}, 
+      #{doUserAddress,jdbcType=VARCHAR}, #{doCost,jdbcType=INTEGER}, #{doCreateTime,jdbcType=TIMESTAMP}, 
+      #{doStatus,jdbcType=INTEGER}, #{doType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="DO_ID" keyProperty="doId" parameterType="DangdangOrder" useGeneratedKeys="true">
+    insert into dangdang_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="doUserId != null">
+        DO_USER_ID,
+      </if>
+      <if test="doUserName != null">
+        DO_USER_NAME,
+      </if>
+      <if test="doUserTel != null">
+        DO_USER_TEL,
+      </if>
+      <if test="doUserAddress != null">
+        DO_USER_ADDRESS,
+      </if>
+      <if test="doCost != null">
+        DO_COST,
+      </if>
+      <if test="doCreateTime != null">
+        DO_CREATE_TIME,
+      </if>
+      <if test="doStatus != null">
+        DO_STATUS,
+      </if>
+      <if test="doType != null">
+        DO_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="doUserId != null">
+        #{doUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserName != null">
+        #{doUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserTel != null">
+        #{doUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserAddress != null">
+        #{doUserAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="doCost != null">
+        #{doCost,jdbcType=INTEGER},
+      </if>
+      <if test="doCreateTime != null">
+        #{doCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="doStatus != null">
+        #{doStatus,jdbcType=INTEGER},
+      </if>
+      <if test="doType != null">
+        #{doType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="DangdangOrderExample" resultType="java.lang.Long">
+    select count(*) from dangdang_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dangdang_order
+    <set>
+      <if test="record.doId != null">
+        DO_ID = #{record.doId,jdbcType=INTEGER},
+      </if>
+      <if test="record.doUserId != null">
+        DO_USER_ID = #{record.doUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doUserName != null">
+        DO_USER_NAME = #{record.doUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doUserTel != null">
+        DO_USER_TEL = #{record.doUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doUserAddress != null">
+        DO_USER_ADDRESS = #{record.doUserAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doCost != null">
+        DO_COST = #{record.doCost,jdbcType=INTEGER},
+      </if>
+      <if test="record.doCreateTime != null">
+        DO_CREATE_TIME = #{record.doCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.doStatus != null">
+        DO_STATUS = #{record.doStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.doType != null">
+        DO_TYPE = #{record.doType,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dangdang_order
+    set DO_ID = #{record.doId,jdbcType=INTEGER},
+      DO_USER_ID = #{record.doUserId,jdbcType=VARCHAR},
+      DO_USER_NAME = #{record.doUserName,jdbcType=VARCHAR},
+      DO_USER_TEL = #{record.doUserTel,jdbcType=VARCHAR},
+      DO_USER_ADDRESS = #{record.doUserAddress,jdbcType=VARCHAR},
+      DO_COST = #{record.doCost,jdbcType=INTEGER},
+      DO_CREATE_TIME = #{record.doCreateTime,jdbcType=TIMESTAMP},
+      DO_STATUS = #{record.doStatus,jdbcType=INTEGER},
+      DO_TYPE = #{record.doType,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="DangdangOrder">
+    update dangdang_order
+    <set>
+      <if test="doUserId != null">
+        DO_USER_ID = #{doUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserName != null">
+        DO_USER_NAME = #{doUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserTel != null">
+        DO_USER_TEL = #{doUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="doUserAddress != null">
+        DO_USER_ADDRESS = #{doUserAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="doCost != null">
+        DO_COST = #{doCost,jdbcType=INTEGER},
+      </if>
+      <if test="doCreateTime != null">
+        DO_CREATE_TIME = #{doCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="doStatus != null">
+        DO_STATUS = #{doStatus,jdbcType=INTEGER},
+      </if>
+      <if test="doType != null">
+        DO_TYPE = #{doType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where DO_ID = #{doId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="DangdangOrder">
+    update dangdang_order
+    set DO_USER_ID = #{doUserId,jdbcType=VARCHAR},
+      DO_USER_NAME = #{doUserName,jdbcType=VARCHAR},
+      DO_USER_TEL = #{doUserTel,jdbcType=VARCHAR},
+      DO_USER_ADDRESS = #{doUserAddress,jdbcType=VARCHAR},
+      DO_COST = #{doCost,jdbcType=INTEGER},
+      DO_CREATE_TIME = #{doCreateTime,jdbcType=TIMESTAMP},
+      DO_STATUS = #{doStatus,jdbcType=INTEGER},
+      DO_TYPE = #{doType,jdbcType=INTEGER}
+    where DO_ID = #{doId,jdbcType=INTEGER}
+  </update>
+</mapper>

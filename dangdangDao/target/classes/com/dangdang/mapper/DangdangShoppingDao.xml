@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangdang.mapper.DangdangShoppingDao">
+  <resultMap id="BaseResultMap" type="com.dangdang.po.DangdangShopping">
+    <id column="DOD_ID" jdbcType="INTEGER" property="dodId" />
+    <result column="DO_USER_ID" jdbcType="INTEGER" property="doUserId" />
+    <result column="DP_ID" jdbcType="INTEGER" property="dpId" />
+    <result column="DOD_QUANTITY" jdbcType="INTEGER" property="dodQuantity" />
+    <result column="DOD_COST" jdbcType="DOUBLE" property="dodCost" />
+    <result column="DO_STATE" jdbcType="INTEGER" property="doState" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DOD_ID, DO_USER_ID, DP_ID, DOD_QUANTITY, DOD_COST, DO_STATE
+  </sql>
+  <select id="selectByExample" parameterType="DangdangShoppingExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dangdang_shopping
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dangdang_shopping
+    where DOD_ID = #{dodId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dangdang_shopping
+    where DOD_ID = #{dodId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="DangdangShoppingExample">
+    delete from dangdang_shopping
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="DOD_ID" keyProperty="dodId" parameterType="DangdangShopping" useGeneratedKeys="true">
+    insert into dangdang_shopping (DO_USER_ID, DP_ID, DOD_QUANTITY, 
+      DOD_COST, DO_STATE)
+    values (#{doUserId,jdbcType=INTEGER}, #{dpId,jdbcType=INTEGER}, #{dodQuantity,jdbcType=INTEGER}, 
+      #{dodCost,jdbcType=DOUBLE}, #{doState,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="DOD_ID" keyProperty="dodId" parameterType="DangdangShopping" useGeneratedKeys="true">
+    insert into dangdang_shopping
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="doUserId != null">
+        DO_USER_ID,
+      </if>
+      <if test="dpId != null">
+        DP_ID,
+      </if>
+      <if test="dodQuantity != null">
+        DOD_QUANTITY,
+      </if>
+      <if test="dodCost != null">
+        DOD_COST,
+      </if>
+      <if test="doState != null">
+        DO_STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="doUserId != null">
+        #{doUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dpId != null">
+        #{dpId,jdbcType=INTEGER},
+      </if>
+      <if test="dodQuantity != null">
+        #{dodQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dodCost != null">
+        #{dodCost,jdbcType=DOUBLE},
+      </if>
+      <if test="doState != null">
+        #{doState,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="DangdangShoppingExample" resultType="java.lang.Long">
+    select count(*) from dangdang_shopping
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dangdang_shopping
+    <set>
+      <if test="record.dodId != null">
+        DOD_ID = #{record.dodId,jdbcType=INTEGER},
+      </if>
+      <if test="record.doUserId != null">
+        DO_USER_ID = #{record.doUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dpId != null">
+        DP_ID = #{record.dpId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dodQuantity != null">
+        DOD_QUANTITY = #{record.dodQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.dodCost != null">
+        DOD_COST = #{record.dodCost,jdbcType=DOUBLE},
+      </if>
+      <if test="record.doState != null">
+        DO_STATE = #{record.doState,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dangdang_shopping
+    set DOD_ID = #{record.dodId,jdbcType=INTEGER},
+      DO_USER_ID = #{record.doUserId,jdbcType=INTEGER},
+      DP_ID = #{record.dpId,jdbcType=INTEGER},
+      DOD_QUANTITY = #{record.dodQuantity,jdbcType=INTEGER},
+      DOD_COST = #{record.dodCost,jdbcType=DOUBLE},
+      DO_STATE = #{record.doState,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="DangdangShopping">
+    update dangdang_shopping
+    <set>
+      <if test="doUserId != null">
+        DO_USER_ID = #{doUserId,jdbcType=INTEGER},
+      </if>
+      <if test="dpId != null">
+        DP_ID = #{dpId,jdbcType=INTEGER},
+      </if>
+      <if test="dodQuantity != null">
+        DOD_QUANTITY = #{dodQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dodCost != null">
+        DOD_COST = #{dodCost,jdbcType=DOUBLE},
+      </if>
+      <if test="doState != null">
+        DO_STATE = #{doState,jdbcType=INTEGER},
+      </if>
+    </set>
+    where DOD_ID = #{dodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="DangdangShopping">
+    update dangdang_shopping
+    set DO_USER_ID = #{doUserId,jdbcType=INTEGER},
+      DP_ID = #{dpId,jdbcType=INTEGER},
+      DOD_QUANTITY = #{dodQuantity,jdbcType=INTEGER},
+      DOD_COST = #{dodCost,jdbcType=DOUBLE},
+      DO_STATE = #{doState,jdbcType=INTEGER}
+    where DOD_ID = #{dodId,jdbcType=INTEGER}
+  </update>
+</mapper>

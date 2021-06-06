@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangdang.mapper.DangdangUserDao">
+  <resultMap id="BaseResultMap" type="com.dangdang.po.DangdangUser">
+    <id column="Du_user_id" jdbcType="INTEGER" property="duUserId" />
+    <result column="DU_EMAIL" jdbcType="VARCHAR" property="duEmail" />
+    <result column="DU_USER_NAME" jdbcType="VARCHAR" property="duUserName" />
+    <result column="DU_PASSWORD" jdbcType="VARCHAR" property="duPassword" />
+    <result column="DU_SEX" jdbcType="VARCHAR" property="duSex" />
+    <result column="DU_BIRTHDAY" jdbcType="TIMESTAMP" property="duBirthday" />
+    <result column="DU_IDENTITY_CODE" jdbcType="VARCHAR" property="duIdentityCode" />
+    <result column="DU_MOBILE" jdbcType="VARCHAR" property="duMobile" />
+    <result column="DU_createtime" jdbcType="TIMESTAMP" property="duCreatetime" />
+    <result column="DU_createuser" jdbcType="TIMESTAMP" property="duCreateuser" />
+    <result column="DU_upDATETIMEtime" jdbcType="TIMESTAMP" property="duUpdatetimetime" />
+    <result column="DU_upDATETIMEuser" jdbcType="TIMESTAMP" property="duUpdatetimeuser" />
+    <result column="DU_STATUS" jdbcType="INTEGER" property="duStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <!--登录-->
+  <select id="UserLogin" resultMap="BaseResultMap" parameterType="DangdangUser">
+    SELECT * FROM dangdang_user WHERE DU_EMAIL=#{duEmail} AND DU_PASSWORD=#{duPassword}
+  </select>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    Du_user_id, DU_EMAIL, DU_USER_NAME, DU_PASSWORD, DU_SEX, DU_BIRTHDAY, DU_IDENTITY_CODE, 
+    DU_MOBILE, DU_createtime, DU_createuser, DU_upDATETIMEtime, DU_upDATETIMEuser, DU_STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.dangdang.po.DangdangUserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dangdang_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dangdang_user
+    where Du_user_id = #{duUserId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dangdang_user
+    where Du_user_id = #{duUserId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.dangdang.po.DangdangUserExample">
+    delete from dangdang_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="Du_user_id" keyProperty="duUserId" parameterType="com.dangdang.po.DangdangUser" useGeneratedKeys="true">
+    insert into dangdang_user (DU_EMAIL, DU_USER_NAME, DU_PASSWORD, 
+      DU_SEX, DU_BIRTHDAY, DU_IDENTITY_CODE, 
+      DU_MOBILE, DU_createtime, DU_createuser, 
+      DU_upDATETIMEtime, DU_upDATETIMEuser, 
+      DU_STATUS)
+    values (#{duEmail,jdbcType=VARCHAR}, #{duUserName,jdbcType=VARCHAR}, #{duPassword,jdbcType=VARCHAR}, 
+      #{duSex,jdbcType=VARCHAR}, #{duBirthday,jdbcType=TIMESTAMP}, #{duIdentityCode,jdbcType=VARCHAR}, 
+      #{duMobile,jdbcType=VARCHAR}, #{duCreatetime,jdbcType=TIMESTAMP}, #{duCreateuser,jdbcType=TIMESTAMP}, 
+      #{duUpdatetimetime,jdbcType=TIMESTAMP}, #{duUpdatetimeuser,jdbcType=TIMESTAMP}, 
+      #{duStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="Du_user_id" keyProperty="duUserId" parameterType="com.dangdang.po.DangdangUser" useGeneratedKeys="true">
+    insert into dangdang_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="duEmail != null">
+        DU_EMAIL,
+      </if>
+      <if test="duUserName != null">
+        DU_USER_NAME,
+      </if>
+      <if test="duPassword != null">
+        DU_PASSWORD,
+      </if>
+      <if test="duSex != null">
+        DU_SEX,
+      </if>
+      <if test="duBirthday != null">
+        DU_BIRTHDAY,
+      </if>
+      <if test="duIdentityCode != null">
+        DU_IDENTITY_CODE,
+      </if>
+      <if test="duMobile != null">
+        DU_MOBILE,
+      </if>
+      <if test="duCreatetime != null">
+        DU_createtime,
+      </if>
+      <if test="duCreateuser != null">
+        DU_createuser,
+      </if>
+      <if test="duUpdatetimetime != null">
+        DU_upDATETIMEtime,
+      </if>
+      <if test="duUpdatetimeuser != null">
+        DU_upDATETIMEuser,
+      </if>
+      <if test="duStatus != null">
+        DU_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="duEmail != null">
+        #{duEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="duUserName != null">
+        #{duUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="duPassword != null">
+        #{duPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="duSex != null">
+        #{duSex,jdbcType=VARCHAR},
+      </if>
+      <if test="duBirthday != null">
+        #{duBirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duIdentityCode != null">
+        #{duIdentityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="duMobile != null">
+        #{duMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="duCreatetime != null">
+        #{duCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duCreateuser != null">
+        #{duCreateuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duUpdatetimetime != null">
+        #{duUpdatetimetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duUpdatetimeuser != null">
+        #{duUpdatetimeuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duStatus != null">
+        #{duStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.dangdang.po.DangdangUserExample" resultType="java.lang.Long">
+    select count(*) from dangdang_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dangdang_user
+    <set>
+      <if test="record.duUserId != null">
+        Du_user_id = #{record.duUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.duEmail != null">
+        DU_EMAIL = #{record.duEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duUserName != null">
+        DU_USER_NAME = #{record.duUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duPassword != null">
+        DU_PASSWORD = #{record.duPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duSex != null">
+        DU_SEX = #{record.duSex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duBirthday != null">
+        DU_BIRTHDAY = #{record.duBirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duIdentityCode != null">
+        DU_IDENTITY_CODE = #{record.duIdentityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duMobile != null">
+        DU_MOBILE = #{record.duMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duCreatetime != null">
+        DU_createtime = #{record.duCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duCreateuser != null">
+        DU_createuser = #{record.duCreateuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duUpdatetimetime != null">
+        DU_upDATETIMEtime = #{record.duUpdatetimetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duUpdatetimeuser != null">
+        DU_upDATETIMEuser = #{record.duUpdatetimeuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duStatus != null">
+        DU_STATUS = #{record.duStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dangdang_user
+    set Du_user_id = #{record.duUserId,jdbcType=INTEGER},
+      DU_EMAIL = #{record.duEmail,jdbcType=VARCHAR},
+      DU_USER_NAME = #{record.duUserName,jdbcType=VARCHAR},
+      DU_PASSWORD = #{record.duPassword,jdbcType=VARCHAR},
+      DU_SEX = #{record.duSex,jdbcType=VARCHAR},
+      DU_BIRTHDAY = #{record.duBirthday,jdbcType=TIMESTAMP},
+      DU_IDENTITY_CODE = #{record.duIdentityCode,jdbcType=VARCHAR},
+      DU_MOBILE = #{record.duMobile,jdbcType=VARCHAR},
+      DU_createtime = #{record.duCreatetime,jdbcType=TIMESTAMP},
+      DU_createuser = #{record.duCreateuser,jdbcType=TIMESTAMP},
+      DU_upDATETIMEtime = #{record.duUpdatetimetime,jdbcType=TIMESTAMP},
+      DU_upDATETIMEuser = #{record.duUpdatetimeuser,jdbcType=TIMESTAMP},
+      DU_STATUS = #{record.duStatus,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dangdang.po.DangdangUser">
+    update dangdang_user
+    <set>
+      <if test="duEmail != null">
+        DU_EMAIL = #{duEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="duUserName != null">
+        DU_USER_NAME = #{duUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="duPassword != null">
+        DU_PASSWORD = #{duPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="duSex != null">
+        DU_SEX = #{duSex,jdbcType=VARCHAR},
+      </if>
+      <if test="duBirthday != null">
+        DU_BIRTHDAY = #{duBirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duIdentityCode != null">
+        DU_IDENTITY_CODE = #{duIdentityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="duMobile != null">
+        DU_MOBILE = #{duMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="duCreatetime != null">
+        DU_createtime = #{duCreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duCreateuser != null">
+        DU_createuser = #{duCreateuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duUpdatetimetime != null">
+        DU_upDATETIMEtime = #{duUpdatetimetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duUpdatetimeuser != null">
+        DU_upDATETIMEuser = #{duUpdatetimeuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duStatus != null">
+        DU_STATUS = #{duStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Du_user_id = #{duUserId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dangdang.po.DangdangUser">
+    update dangdang_user
+    set DU_EMAIL = #{duEmail,jdbcType=VARCHAR},
+      DU_USER_NAME = #{duUserName,jdbcType=VARCHAR},
+      DU_PASSWORD = #{duPassword,jdbcType=VARCHAR},
+      DU_SEX = #{duSex,jdbcType=VARCHAR},
+      DU_BIRTHDAY = #{duBirthday,jdbcType=TIMESTAMP},
+      DU_IDENTITY_CODE = #{duIdentityCode,jdbcType=VARCHAR},
+      DU_MOBILE = #{duMobile,jdbcType=VARCHAR},
+      DU_createtime = #{duCreatetime,jdbcType=TIMESTAMP},
+      DU_createuser = #{duCreateuser,jdbcType=TIMESTAMP},
+      DU_upDATETIMEtime = #{duUpdatetimetime,jdbcType=TIMESTAMP},
+      DU_upDATETIMEuser = #{duUpdatetimeuser,jdbcType=TIMESTAMP},
+      DU_STATUS = #{duStatus,jdbcType=INTEGER}
+    where Du_user_id = #{duUserId,jdbcType=INTEGER}
+  </update>
+</mapper>

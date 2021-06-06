@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangdang.mapper.DangdangProductDao">
+  <resultMap id="BaseResultMap" type="com.dangdang.po.DangdangProduct">
+    <id column="DP_ID" jdbcType="INTEGER" property="dpId" />
+    <result column="DP_NAME" jdbcType="VARCHAR" property="dpName" />
+    <result column="DP_DESCRIPTION" jdbcType="VARCHAR" property="dpDescription" />
+    <result column="DP_PRICE" jdbcType="DOUBLE" property="dpPrice" />
+    <result column="DP_STOCK" jdbcType="INTEGER" property="dpStock" />
+    <result column="DPC_CHILD_ID" jdbcType="INTEGER" property="dpcChildId" />
+    <result column="DP_FILE_NAME" jdbcType="VARCHAR" property="dpFileName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DP_ID, DP_NAME, DP_DESCRIPTION, DP_PRICE, DP_STOCK, DPC_CHILD_ID, DP_FILE_NAME
+  </sql>
+  <select id="selectByExample" parameterType="DangdangProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dangdang_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dangdang_product
+    where DP_ID = #{dpId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dangdang_product
+    where DP_ID = #{dpId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="DangdangProductExample">
+    delete from dangdang_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insert" keyColumn="DP_ID" keyProperty="dpId" parameterType="DangdangProduct" useGeneratedKeys="true">
+    <selectKey keyProperty="dpId" resultType="java.lang.Integer" order="BEFORE">
+      select max(dp_id)+1 from DANGDANG_PRODUCT
+    </selectKey>
+    insert into dangdang_product (DP_ID,DP_NAME, DP_DESCRIPTION, DP_PRICE,
+      DP_STOCK, DPC_CHILD_ID, DP_FILE_NAME
+      )
+    values (#{dpId},#{dpName,jdbcType=VARCHAR},#{dpDescription,jdbcType=VARCHAR},#{dpPrice,jdbcType=DOUBLE},
+      #{dpStock,jdbcType=INTEGER},#{dpcChildId,jdbcType=INTEGER},#{dpFileName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="DP_ID" keyProperty="dpId" parameterType="DangdangProduct" useGeneratedKeys="true">
+    insert into dangdang_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dpName != null">
+        DP_NAME,
+      </if>
+      <if test="dpDescription != null">
+        DP_DESCRIPTION,
+      </if>
+      <if test="dpPrice != null">
+        DP_PRICE,
+      </if>
+      <if test="dpStock != null">
+        DP_STOCK,
+      </if>
+      <if test="dpcChildId != null">
+        DPC_CHILD_ID,
+      </if>
+      <if test="dpFileName != null">
+        DP_FILE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dpName != null">
+        #{dpName,jdbcType=VARCHAR},
+      </if>
+      <if test="dpDescription != null">
+        #{dpDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="dpPrice != null">
+        #{dpPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="dpStock != null">
+        #{dpStock,jdbcType=INTEGER},
+      </if>
+      <if test="dpcChildId != null">
+        #{dpcChildId,jdbcType=INTEGER},
+      </if>
+      <if test="dpFileName != null">
+        #{dpFileName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="DangdangProductExample" resultType="java.lang.Long">
+    select count(*) from dangdang_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update dangdang_product
+    <set>
+      <if test="record.dpId != null">
+        DP_ID = #{record.dpId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dpName != null">
+        DP_NAME = #{record.dpName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dpDescription != null">
+        DP_DESCRIPTION = #{record.dpDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dpPrice != null">
+        DP_PRICE = #{record.dpPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dpStock != null">
+        DP_STOCK = #{record.dpStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.dpcChildId != null">
+        DPC_CHILD_ID = #{record.dpcChildId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dpFileName != null">
+        DP_FILE_NAME = #{record.dpFileName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update dangdang_product
+    set DP_ID = #{record.dpId,jdbcType=INTEGER},
+      DP_NAME = #{record.dpName,jdbcType=VARCHAR},
+      DP_DESCRIPTION = #{record.dpDescription,jdbcType=VARCHAR},
+      DP_PRICE = #{record.dpPrice,jdbcType=DOUBLE},
+      DP_STOCK = #{record.dpStock,jdbcType=INTEGER},
+      DPC_CHILD_ID = #{record.dpcChildId,jdbcType=INTEGER},
+      DP_FILE_NAME = #{record.dpFileName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="DangdangProduct">
+    update dangdang_product
+    <set>
+      <if test="dpName != null">
+        DP_NAME = #{dpName,jdbcType=VARCHAR},
+      </if>
+      <if test="dpDescription != null">
+        DP_DESCRIPTION = #{dpDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="dpPrice != null">
+        DP_PRICE = #{dpPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="dpStock != null">
+        DP_STOCK = #{dpStock,jdbcType=INTEGER},
+      </if>
+      <if test="dpcChildId != null">
+        DPC_CHILD_ID = #{dpcChildId,jdbcType=INTEGER},
+      </if>
+      <if test="dpFileName != null">
+        DP_FILE_NAME = #{dpFileName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DP_ID = #{dpId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="DangdangProduct">
+    update dangdang_product
+    set DP_NAME = #{dpName,jdbcType=VARCHAR},
+      DP_DESCRIPTION = #{dpDescription,jdbcType=VARCHAR},
+      DP_PRICE = #{dpPrice,jdbcType=DOUBLE},
+      DP_STOCK = #{dpStock,jdbcType=INTEGER},
+      DPC_CHILD_ID = #{dpcChildId,jdbcType=INTEGER},
+      DP_FILE_NAME = #{dpFileName,jdbcType=VARCHAR}
+    where DP_ID = #{dpId,jdbcType=INTEGER}
+  </update>
+  <!--点击查询商品信息-->
+  <select id="QueryProductByChildID" resultMap="BaseResultMap">
+    SELECT * FROM dangdang_product
+    <where>
+      <if test="dpcParentId!=null">
+        and DPC_CHILD_ID IN (SELECT c.DPC_ID FROM dangdang_product_category c WHERE c.DPC_PARENT_ID=#{dpcParentId})
+
+      </if>
+      <if test="product!=null">
+        <if test="product.dpcChildId!=null">
+            and DPC_CHILD_ID=#{product.dpcChildId}
+        </if>
+      </if>
+    </where>
+  </select>
+</mapper>
